@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <script src="./passhandler.js"></script>
+    <title>Signup</title>
+</head>
+
+<body>
+    <div class="bodiv">
+        <div>
+            <h1>SIGNUP</h1>
+        </div>
+        <div id="signupbox">
+            <form action="" method="POST">
+                <div>
+                    <label for="name_signup">Name:</label>
+                    <input required type="text" name="name_signup" id="name_signup" placeholder="Full Name">
+                    <hr>
+                    <label for="nick_signup">Nickname:</label>
+                    <input required type="text" name="nick_signup" id="nick_signup" placeholder="example_123">
+                    <hr>
+                    <label for="mail_signup">E-mail:</label>
+                    <input required type="email" name="mail_signup" id="mail_signup" placeholder="example_123@example.com">
+                    <hr>
+                    <label for="pass1_signup">Password:</label>
+                    <input required type="password" name="pass1_signup" id="pass1_signup" placeholder="Your password">
+                    <hr>
+                    <label for="pass2_signup">Password:</label>
+                    <input required type="password" name="pass2_signup" id="pass2_signup" placeholder="Repeat your password">
+                </div>
+                <div>
+                    <button disabled type="submit" id="btn_signup" type="submit">SIGNUP</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <p id="err_mesg" style="display: none">Esto es un mensaje de error. Teóricamente.</p>
+        </div>
+    </div>
+</body>
+
+</html>
