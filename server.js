@@ -36,7 +36,7 @@ app.use(cookie_session({
 
 app.get('/', function (req, res) {
     if (req.session.user != null) {
-        res.redirect('home');
+        res.redirect('/home');
     } else {
         fs.readFile('./html/login.html', 'utf8', function (err, text) {
             res.send(text);
@@ -50,6 +50,7 @@ app.post('/', function (req, res) {
             throw err;
         } else {
             if (result.length > 0) {
+                req.session.name = result[0].name;
                 req.session.user = req.body.nick;
                 res.redirect('/home');
             } else {
@@ -57,6 +58,10 @@ app.post('/', function (req, res) {
             };
         };
     });
+});
+
+app.get('/ajax', function (req, res) {
+    res.send(req.session.user);
 });
 
 app.get('/home', function (req, res) {
@@ -69,7 +74,7 @@ app.get('/home', function (req, res) {
             options += ("<option value=" + user.id + ">" + user.name + "</option>");
         };
         fs.readFile('./html/home.html', 'utf8', function (err, text) {
-            text = text.replace('[username]', req.session.user);
+            text = text.replace('[username]', req.session.name);
             text = text.replace('[options]', options);
             res.send(text);
         });
@@ -95,6 +100,8 @@ app.post('/signup', function (req, res) {
         res.send('User created succesfully');
     });
 });
+
+// Functions
 
 function cookieChecker(req, res) {
     if (req.session.user == null) {
