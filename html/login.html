@@ -15,14 +15,22 @@
         <div>
             <h1>LOGIN</h1>
         </div>
+        <div>
+            <a href="/signup">Signup</a>
+        </div>
         <div id="loginbox">
             <form action="" method="post">
-                <input required type="text" name="nick" id="nick_login" placeholder="Nickname">
-                <input required type="password" name="pass" id="pass_login" placeholder="Password">
+                <div>
+                    <input required type="text" name="nick" id="nick_login" placeholder="Nickname">
+                    <input required type="password" name="pass" id="pass_login" placeholder="Password">
+                </div>
+                <div>
+                    <button type="submit" id="btn_login">LOGIN</button>
+                </div>
             </form>
-            <div>
-                <button type="submit" id="btn_login">LOGIN</button>
-            </div>
+        </div>
+        <div>
+            <p id="err_mesg" style="display: none">Esto es un mensaje de error. Teóricamente.</p>
         </div>
     </div>
 </body>

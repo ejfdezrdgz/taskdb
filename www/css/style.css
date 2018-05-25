@@ -13,6 +13,23 @@ h1 {
     border: 2px solid black;
 }
 
+hr{
+    width: 95%;
+}
+
+header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: gainsboro;
+}
+
+header a, p{
+    margin: 0px;
+    padding: 30px;
+}
+
 .bodiv{
     width: 100%;
     height: 100%;
@@ -28,9 +45,11 @@ h1 {
 }
 
 #loginbox{
-    width: 30%;
+    width: 35%;
+    height: 100px;
     display: flex;
     align-items: center;
+    border: 2px solid black;
     justify-content: space-evenly;
 }
 
@@ -40,8 +59,13 @@ h1 {
 }
 
 #loginbox form{
-    width: 250px;
-    height: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#loginbox form div{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -59,13 +83,14 @@ h1 {
     align-self: center;
 }
 
+#signupbox form{
+    width: 70%;
+    display: flex;
+}
+
 #signupbox form div{
-    width: 45%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-}
-
-#signupbox hr{
-    width: 95%;
 }
