@@ -50,18 +50,18 @@ app.post('/', function (req, res) {
             throw err;
         } else {
             if (result.length > 0) {
+                req.session.uid = result[0].id;
                 req.session.name = result[0].name;
                 req.session.user = req.body.nick;
                 res.redirect('/home');
             } else {
-                res.send('Nice try, buddy');
+                fs.readFile('./html/login.html', 'utf8', function (err, text) {
+                    text = text.replace('class="hideerror">[loginerror]', 'class="showerror">User or password incorrect');
+                    res.send(text);
+                });
             };
         };
     });
-});
-
-app.get('/ajax', function (req, res) {
-    res.send(req.session.user);
 });
 
 app.get('/home', function (req, res) {
@@ -69,13 +69,8 @@ app.get('/home', function (req, res) {
         return;
     };
     connection.query('SELECT id, name FROM users', function (err, result) {
-        let options = "";
-        for (const user of result) {
-            options += ("<option value=" + user.id + ">" + user.name + "</option>");
-        };
         fs.readFile('./html/home.html', 'utf8', function (err, text) {
             text = text.replace('[username]', req.session.name);
-            text = text.replace('[options]', options);
             res.send(text);
         });
     });
@@ -98,6 +93,29 @@ app.get('/signup', function (req, res) {
 app.post('/signup', function (req, res) {
     connection.query("INSERT INTO users (name, nick, pass, mail) VALUES (?, ?, ?, ?)", [req.body.name_signup, req.body.nick_signup, req.body.pass1_signup, req.body.mail_signup], function (err, result) {
         res.send('User created succesfully');
+    });
+});
+
+app.get('/userinfo', function (req, res) {
+    
+});
+
+app.post('/userinfo', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query("SELECT * FROM users WHERE id=?", [req.session.uid], function (err, result) {
+        if (err) {
+            throw err;
+        } else {
+            var uinfo = {
+                uid = result[0].id,
+                uname = result[0].name,
+                unick = result[0].nick,
+                umail = result[0].mail
+            };
+            res.send(JSON.stringify(uinfo));
+        };
     });
 });
 

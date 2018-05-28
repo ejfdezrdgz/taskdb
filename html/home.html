@@ -14,19 +14,50 @@
 <body>
     <div class="bodiv">
         <header>
-            <p>Hola, [username].</p>
-            <a href="/logout">Logout</a>
+            <p id="huser">[username]</p>
+            <ul class="ddhide" id="userdd">
+                <li>
+                    <a href="/" id="ddhome">Home</a>
+                </li>
+                <li>
+                    <a href="/edituser" id="edituser">User configuration</a>
+                </li>
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+            </ul>
         </header>
         <hr>
+
         <div>
             <h1>Task App</h1>
         </div>
-        <select name="" id="">
-            <option value="8">Van de Graaff</option>
-            [options]
-        </select>
-        <button id="btnAjax">AJAX Request</button>
-        <div id="data"></div>
+
+        <div id="listtasks" style="display: none">LISTA TAREAS</div>
+        <div id="newtask" style="display: none">NUEVA TAREA</div>
+        <div id="userinfo" style="display: none">
+            <form action="/userinfo" method="post">
+                <div>
+                    <label for="name_signup">Name:</label>
+                    <input required type="text" name="name_signup" id="name_signup" placeholder="Full Name">
+                    <hr>
+                    <label for="nick_signup">Nickname:</label>
+                    <input required type="text" name="nick_signup" id="nick_signup" placeholder="example_123">
+                    <hr>
+                    <label for="mail_signup">E-mail:</label>
+                    <input required type="email" name="mail_signup" id="mail_signup" placeholder="example_123@example.com">
+                    <hr>
+                    <label for="pass1_signup">Password:</label>
+                    <input required type="password" name="pass1_signup" id="pass1_signup" placeholder="Your password">
+                    <hr>
+                    <label for="pass2_signup">Password:</label>
+                    <input required type="password" name="pass2_signup" id="pass2_signup" placeholder="Repeat your password">
+                </div>
+                <div>
+                    <button disabled type="submit" id="btn_signup" type="submit">SIGNUP</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 

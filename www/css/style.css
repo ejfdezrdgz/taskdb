@@ -21,18 +21,18 @@ header{
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: right;
     background-color: gainsboro;
 }
 
-header a, p{
+header p{
     margin: 0px;
-    padding: 30px;
+    padding: 20px;
 }
 
-p{
+/* p{
     border: 1px solid black;
-}
+} */
 
 .bodiv{
     width: 100%;
@@ -48,12 +48,40 @@ p{
     width: 100%;
 }
 
+.ddhide{
+    display: none;
+    list-style: none;
+}
+
+.ddshow{
+    display: block;
+    list-style: none;
+}
+
+.hide{
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
+#huser{
+    cursor: pointer;
+}
+
+#err_login{
+    margin-top: 10px;
+}
+
 #loginbox{
     width: 35%;
-    height: 100px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     display: flex;
     align-items: center;
-    border: 2px solid black;
+    flex-direction: column;
+    /* border: 2px solid black; */
     justify-content: space-evenly;
 }
 
@@ -97,4 +125,22 @@ p{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+#userinfo{
+    display: none;
+}
+
+#wantaccount{
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: gainsboro;
+}
+
+#wantlogin{
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: gainsboro;
 }

@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <script src="./js/login.js"></script>
     <title>Login</title>
 </head>
 
@@ -15,8 +16,8 @@
         <div>
             <h1>LOGIN</h1>
         </div>
-        <div>
-            <a href="/signup">Signup</a>
+        <div id="wantaccount">
+            Want an account? <a href="/signup">Signup</a>
         </div>
         <div id="loginbox">
             <form action="" method="post">
@@ -28,9 +29,10 @@
                     <button type="submit" id="btn_login">LOGIN</button>
                 </div>
             </form>
+            <div id="err_login" class="hide">[loginerror]</div>
         </div>
         <div>
-            <p id="err_mesg" style="display: none">Esto es un mensaje de error. Teóricamente.</p>
+            <p id="err_mesg" class="hide">Esto es un mensaje de error. Teóricamente.</p>
         </div>
     </div>
 </body>
