@@ -3,6 +3,14 @@
     font-family: 'Segoe UI';
 }
 
+article {
+    width: 100%;
+    padding: 10px;
+    min-height: 20px;
+    margin-bottom: 10px;
+    background-color: gainsboro;
+}
+
 body{
     margin: 0px;
     display: flex;
@@ -10,7 +18,7 @@ body{
 
 h1 {
     padding: 10px 20px;
-    border: 2px solid black;
+    background-color: gainsboro;
 }
 
 hr{
@@ -33,6 +41,25 @@ header p{
 /* p{
     border: 1px solid black;
 } */
+
+.artdiv{
+    /* flex: 1; */
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid black;
+}
+
+.artdiv p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.artheader{
+    display: flex;
+    justify-content: space-evenly;
+}
 
 .bodiv{
     width: 100%;
@@ -66,12 +93,21 @@ header p{
     display: block;
 }
 
-#huser{
-    cursor: pointer;
+#descdiv{
+    display: flex;
+    justify-content: space-between;
 }
 
 #err_login{
     margin-top: 10px;
+}
+
+#huser{
+    cursor: pointer;
+}
+
+#listtasks{
+    width: 80%;
 }
 
 #loginbox{
@@ -103,6 +139,10 @@ header p{
     justify-content: space-evenly;
 }
 
+#newtask{
+    height: 30px;
+}
+
 #signupbox{
     width: 50%;
     display: flex;
@@ -125,6 +165,29 @@ header p{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+#throbber {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 12px solid green;
+    border-right: 12px solid blue;
+    border-bottom: 12px solid red;
+    border-left: 12px solid yellow;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 1s cubic-bezier(0.5, 1, 0.5, 0) infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 #userinfo{

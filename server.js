@@ -45,7 +45,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    connection.query('SELECT * FROM `users` WHERE nick=? AND pass=?', [req.body.nick, req.body.pass], function (err, result) {
+    connection.query('SELECT * FROM users WHERE nick=? AND pass=?', [req.body.nick, req.body.pass], function (err, result) {
         if (err) {
             throw err;
         } else {
@@ -84,6 +84,18 @@ app.get('/logout', function (req, res) {
     res.redirect('/home');
 });
 
+app.post('/newtask', function (req, res) {
+    connection.query('INSERT INTO tasks (title, description, author, executor, date) VALUES (?,?,?,?,?)', [req.body.titl, req.body.desc, req.session.uid, req.body.exec, req.body.date], function (err, result) {
+        if (err) {
+            result = { status: 0, taskid: null };
+        } else {
+            result = { status: 1, taskid: result.insertId };
+        };
+        res.send(JSON.stringify(result));
+        console.log(result);
+    });
+});
+
 app.get('/signup', function (req, res) {
     fs.readFile('./html/signup.html', 'utf8', function (err, text) {
         res.send(text);
@@ -97,10 +109,6 @@ app.post('/signup', function (req, res) {
 });
 
 app.get('/userinfo', function (req, res) {
-    
-});
-
-app.post('/userinfo', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
     };
@@ -109,14 +117,36 @@ app.post('/userinfo', function (req, res) {
             throw err;
         } else {
             var uinfo = {
-                uid = result[0].id,
-                uname = result[0].name,
-                unick = result[0].nick,
-                umail = result[0].mail
+                uid: result[0].id,
+                uname: result[0].name,
+                unick: result[0].nick,
+                umail: result[0].mail
             };
-            res.send(JSON.stringify(uinfo));
+            setTimeout(function () {
+                res.send(JSON.stringify(uinfo));
+            }, 5000);
         };
     });
+});
+
+app.post('/userinfo', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    console.log(req.body.pass, req.body.n1pass, req.body.n2pass);
+
+    if (req.body.pass == '') {
+        res.send('nok');
+    } else {
+        connection.query("UPDATE users SET name=?, pass=?, mail=?  WHERE id=?", [req.body.name, req.body.n1pass, req.body.mail, req.session.uid], function (err, result) {
+            if (result.affectedRows > 0) {
+                res.send('ok');
+            } else {
+                res.send('nok');
+            };
+            console.log(result);
+        });
+    };
 });
 
 // Functions

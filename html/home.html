@@ -33,28 +33,90 @@
             <h1>Task App</h1>
         </div>
 
-        <div id="listtasks" style="display: none">LISTA TAREAS</div>
-        <div id="newtask" style="display: none">NUEVA TAREA</div>
+        <div id="throbber" class="hide"></div>
+        <div id="listtasks" style="display: none">
+            <div>
+                <article>
+                    <div class="artheader">
+                        <div class="artdiv">
+                            <p>Title</p>
+                            <p>[arttitle]</p>
+                        </div>
+                        <div class="artdiv">
+                            <p>Author</p>
+                            <p>[artauth]</p>
+                        </div>
+                        <div class="artdiv">
+                            <p>Executor</p>
+                            <p>[artexec]</p>
+                        </div>
+                        <div class="artdiv">
+                            <p>Date</p>
+                            <p>[artdate]</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="artdiv">
+                        <p>Description</p>
+                        <p>[artdesc]</p>
+                    </div>
+                </article>
+            </div>
+            <div>
+                <article>
+                    <form id="newform" action="" method="post">
+                        <div class="artheader">
+                            <div class="artdiv">
+                                <label for="title">Title</label>
+                                <input required type="text" name="arttitl" id="arttitl" placeholder="Write the title here.">
+                            </div>
+                            <div class="artdiv">
+                                <label for="executor">Executor</label>
+                                <select name="artexec" id="artexec">
+                                    <option value="1">blech</option>
+                                    <option value="2">asdf</option>
+                                </select>
+                            </div>
+                            <div class="artdiv">
+                                <label for="date">Date</label>
+                                <input type="date" name="artdate" id="artdate">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="artdiv">
+                            <div id="descdiv">
+                                <label for="description">Description</label>
+                                <button id="newtask">New task</button>
+                            </div>
+                            <input type="text" name="artdesc" id="artdesc" placeholder="Write the description here.">
+                        </div>
+                    </form>
+                </article>
+            </div>
+        </div>
         <div id="userinfo" style="display: none">
             <form action="/userinfo" method="post">
                 <div>
-                    <label for="name_signup">Name:</label>
-                    <input required type="text" name="name_signup" id="name_signup" placeholder="Full Name">
+                    <label for="edit_name">Name:</label>
+                    <input type="text" name="edit_name" id="edit_name">
                     <hr>
-                    <label for="nick_signup">Nickname:</label>
-                    <input required type="text" name="nick_signup" id="nick_signup" placeholder="example_123">
+                    <label for="edit_nick">Nickname:</label>
+                    <input type="text" name="edit_nick" id="edit_nick">
                     <hr>
-                    <label for="mail_signup">E-mail:</label>
-                    <input required type="email" name="mail_signup" id="mail_signup" placeholder="example_123@example.com">
+                    <label for="edit_mail">E-mail:</label>
+                    <input type="email" name="edit_mail" id="edit_mail">
                     <hr>
-                    <label for="pass1_signup">Password:</label>
-                    <input required type="password" name="pass1_signup" id="pass1_signup" placeholder="Your password">
+                    <label for="pass_check">Current password:</label>
+                    <input type="password" name="pass_check" id="pass_check">
                     <hr>
-                    <label for="pass2_signup">Password:</label>
-                    <input required type="password" name="pass2_signup" id="pass2_signup" placeholder="Repeat your password">
+                    <label for="new_pass1">New password:</label>
+                    <input type="password" name="new_pass1" id="new_pass1">
+                    <hr>
+                    <label for="new_pass2">Repeat new password:</label>
+                    <input type="password" name="new_pass2" id="new_pass2">
                 </div>
                 <div>
-                    <button disabled type="submit" id="btn_signup" type="submit">SIGNUP</button>
+                    <button type="submit" id="edit_submit" type="submit">SUBMIT</button>
                 </div>
             </form>
         </div>
