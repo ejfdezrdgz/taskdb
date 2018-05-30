@@ -6,6 +6,56 @@ window.onload = function () {
 
     function setStyle(elementId, displayType) {
         document.getElementById(elementId).setAttribute('style', 'display: ' + displayType);
+    };
+
+    function showTasklist(tasklist) {
+        let content = '';
+        tasklist.forEach(element => {
+            let block = `<article>
+            <div class="artheader">
+                <div class="artdiv">
+                    <p>Title</p>
+                    <p>${element.title}</p>
+                </div>
+                <div class="artdiv">
+                    <p>Author</p>
+                    <p>${element.author}</p>
+                </div>
+                <div class="artdiv">
+                    <p>Executor</p>
+                    <p>${element.executor}</p>
+                </div>
+                <div class="artdiv">
+                    <p>Date</p>
+                    <p>${element.date}</p>
+                </div>
+            </div>
+            <hr>
+            <div class="artdiv">
+                <p>Description</p>
+                <p>${element.description}</p>
+            </div>
+            </article>`;
+            content += block;
+        });
+        document.getElementById('arttable').innerHTML = content;
+    };
+
+    function reloadTable() {
+        var req = new XMLHttpRequest();
+        req.open('POST', '/reload', true);
+        req.addEventListener('load', function (err, result) {
+            showTasklist(JSON.parse(req.response));
+        });
+        req.addEventListener('error', function (err) {
+        });
+        req.send(null);
+    };
+
+    document.getElementById('createtask').onclick = function () {
+        setStyle('formtable', 'block');
+        setStyle('listtasks', 'none');
+        setStyle('userinfo', 'none');
     }
 
     document.getElementById('huser').onclick = function () {
@@ -18,14 +68,13 @@ window.onload = function () {
 
     document.getElementById('ddhome').onclick = function () {
         event.preventDefault();
-
+        reloadTable();
         if (getStyle('listtasks') == 'display: block') {
             setStyle('listtasks', 'none');
-            setStyle('newtask', 'none');
         } else {
             setStyle('listtasks', 'block');
-            setStyle('newtask', 'block');
             setStyle('userinfo', 'none');
+            setStyle('formtable', 'none')
         }
     };
 
@@ -36,7 +85,6 @@ window.onload = function () {
         req.open('POST', '/userinfo', true);
         req.setRequestHeader('Content-Type', 'application/json');
         req.addEventListener('load', function () {
-            console.log(req.response);
             if (req.response == 'ok') {
                 alert('GUD');
             } else {
@@ -51,7 +99,7 @@ window.onload = function () {
             nick: document.getElementById('edit_nick').value,
             mail: document.getElementById('edit_mail').value,
             pass: document.getElementById('pass_check').value,
-            n2pass: document.getElementById('new_pass1').value,
+            n1pass: document.getElementById('new_pass1').value,
             n2pass: document.getElementById('new_pass2').value
         };
         req.send(JSON.stringify(data));
@@ -59,22 +107,19 @@ window.onload = function () {
 
     document.getElementById('edituser').onclick = function () {
         event.preventDefault();
-
         if (document.getElementById('userinfo').getAttribute('style') != 'display: block') {
             document.getElementById('throbber').setAttribute('class', 'show');
             var req = new XMLHttpRequest();
             req.open('GET', '/userinfo', true);
             req.addEventListener('load', function () {
-                console.log("AJAX accedido");
                 if (req.status >= 200 && req.status < 400) {
                     var userinfo = JSON.parse(req.response);
-                    console.log(userinfo);
                     document.getElementById('edit_name').value = userinfo.uname;
                     document.getElementById('edit_nick').value = userinfo.unick;
                     document.getElementById('edit_mail').value = userinfo.umail;
                     document.getElementById('throbber').setAttribute('class', 'hide');
                     setStyle('listtasks', 'none');
-                    setStyle('newtask', 'none');
+                    setStyle('formtable', 'none');
                     setStyle('userinfo', 'block');
                 } else {
                     console.log(req.status + ' ' + req.statusText);
@@ -89,11 +134,10 @@ window.onload = function () {
         };
     };
 
-    document.getElementById('newtask').onclick = function (event) {
+    document.getElementById('addtask').onclick = function (event) {
         event.preventDefault();
-        console.log('Sending new task data');
         var req = new XMLHttpRequest();
-        req.open('POST', '/newtask', true);
+        req.open('POST', '/addtask', true);
         req.setRequestHeader('Content-Type', 'application/json');
         req.addEventListener('load', function () {
             var answer = JSON.parse(req.response);
@@ -102,7 +146,8 @@ window.onload = function () {
                 document.getElementById('newform').reset();
             } else {
                 alert('No se ha podido crear la tarea');
-            }
+            };
+            reloadTable();
         });
         req.addEventListener('error', function () {
             console.log('SUBMIT error');
@@ -114,6 +159,11 @@ window.onload = function () {
             date: document.getElementById('artdate').value
         };
         req.send(JSON.stringify(data));
+    };
+
+    document.getElementById('reloadlist').onclick = function (event) {
+        event.preventDefault();
+        reloadTable();
     };
 
 };

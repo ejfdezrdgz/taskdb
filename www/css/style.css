@@ -26,11 +26,14 @@ hr{
 }
 
 header{
+    top: 0;
     width: 100%;
     display: flex;
+    position: fixed;
     align-items: center;
     justify-content: right;
     background-color: gainsboro;
+    border-bottom: 1px solid black;
 }
 
 header p{
@@ -38,17 +41,12 @@ header p{
     padding: 20px;
 }
 
-/* p{
-    border: 1px solid black;
-} */
-
 .artdiv{
-    /* flex: 1; */
+    flex: 1;
     display: flex;
     flex-direction: column;
     padding-left: 10px;
     padding-right: 10px;
-    border: 1px solid black;
 }
 
 .artdiv p{
@@ -93,6 +91,22 @@ header p{
     display: block;
 }
 
+#createtask{
+    color: white;
+    right: 15px;
+    bottom: 15px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    cursor: pointer;
+    position: fixed;
+    font-size: 40px;
+    border-radius: 50%;
+    align-items: center;
+    background-color: gray;
+    justify-content: space-around;
+}
+
 #descdiv{
     display: flex;
     justify-content: space-between;
@@ -102,12 +116,22 @@ header p{
     margin-top: 10px;
 }
 
+#formtable{
+    width: 80%;
+    max-width: 700px;
+}
+
+#headerpad{
+    height: 100px;
+}
+
 #huser{
     cursor: pointer;
 }
 
 #listtasks{
     width: 80%;
+    max-width: 700px;
 }
 
 #loginbox{
@@ -117,7 +141,6 @@ header p{
     display: flex;
     align-items: center;
     flex-direction: column;
-    /* border: 2px solid black; */
     justify-content: space-evenly;
 }
 
@@ -139,8 +162,20 @@ header p{
     justify-content: space-evenly;
 }
 
-#newtask{
-    height: 30px;
+#reloadlist{
+    color: white;
+    right: 80px;
+    bottom: 15px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    cursor: pointer;
+    position: fixed;
+    font-size: 40px;
+    border-radius: 50%;
+    align-items: center;
+    background-color: gray;
+    justify-content: space-around;
 }
 
 #signupbox{
@@ -176,6 +211,9 @@ header p{
     border-left: 12px solid yellow;
     width: 40px;
     height: 40px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 1s cubic-bezier(0.5, 1, 0.5, 0) infinite;
 }

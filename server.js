@@ -29,7 +29,7 @@ app.use(body_parser.urlencoded({ extended: true }));
 app.use(cookie_session({
     name: 'session',
     keys: ['SID'],
-    maxAge: 24 * 60 * 60 * 1000
+    maxAge: 12 * 60 * 60 * 1000
 }));
 
 // Endpoints
@@ -64,6 +64,26 @@ app.post('/', function (req, res) {
     });
 });
 
+app.post('/addtask', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query('INSERT INTO tasks (title, description, author, executor, date) VALUES (?,?,?,?,?)', [req.body.titl, req.body.desc, req.session.uid, req.body.exec, req.body.date], function (error, result) {
+        connection.query('SELECT * FROM tasks', function (err, resp) {
+            if (err) {
+                throw err;
+            } else {
+                if (error) {
+                    list = { status: 0, taskid: null, tasks: resp };
+                } else {
+                    list = { status: 1, taskid: result.insertId, tasks: resp };
+                };
+                res.send(JSON.stringify(list));
+            };
+        });
+    });
+});
+
 app.get('/home', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
@@ -71,7 +91,19 @@ app.get('/home', function (req, res) {
     connection.query('SELECT id, name FROM users', function (err, result) {
         fs.readFile('./html/home.html', 'utf8', function (err, text) {
             text = text.replace('[username]', req.session.name);
-            res.send(text);
+            connection.query('SELECT * FROM users', function (err, result) {
+                let selection = '';
+                if (err) {
+                    throw err;
+                } else {
+                    result.forEach(element => {
+                        selection += `
+                        <option value="${element.id}">${element.name}</option>`;
+                    });
+                }
+                text = text.replace('[selector]', selection);
+                res.send(text);
+            });
         });
     });
 });
@@ -84,15 +116,20 @@ app.get('/logout', function (req, res) {
     res.redirect('/home');
 });
 
-app.post('/newtask', function (req, res) {
-    connection.query('INSERT INTO tasks (title, description, author, executor, date) VALUES (?,?,?,?,?)', [req.body.titl, req.body.desc, req.session.uid, req.body.exec, req.body.date], function (err, result) {
-        if (err) {
-            result = { status: 0, taskid: null };
-        } else {
-            result = { status: 1, taskid: result.insertId };
-        };
+app.post('/reload', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query('SELECT tasks.id, title, description, usr1.name as author, usr2.name as executor, date, status FROM tasks, users as usr1, users as usr2 WHERE author=usr1.id AND executor=usr2.id', function (err, result) {
+        result.forEach(element => {
+            string = JSON.stringify(element.date);
+            day = string.substr(9, 2);
+            month = string.substr(6, 2);
+            year = string.substr(1, 4);
+            string = day + '/' + month + '/' + year;
+            element.date = string;
+        });
         res.send(JSON.stringify(result));
-        console.log(result);
     });
 });
 

@@ -27,72 +27,41 @@
                 </li>
             </ul>
         </header>
-        <hr>
-
-        <div>
-            <h1>Task App</h1>
-        </div>
-
+        <div id="headerpad"></div>
         <div id="throbber" class="hide"></div>
         <div id="listtasks" style="display: none">
-            <div>
-                <article>
+            <div id="arttable"></div>
+            <div id="reloadlist">&#8635;</div>
+        </div>
+        <div id="formtable" style="display: none">
+            <article>
+                <form id="newform" action="" method="post">
                     <div class="artheader">
                         <div class="artdiv">
-                            <p>Title</p>
-                            <p>[arttitle]</p>
+                            <label for="title">Title</label>
+                            <input required type="text" name="arttitl" id="arttitl" placeholder="Write the title here.">
                         </div>
                         <div class="artdiv">
-                            <p>Author</p>
-                            <p>[artauth]</p>
+                            <label for="executor">Executor</label>
+                            <select name="artexec" id="artexec">
+                                [selector]
+                            </select>
                         </div>
                         <div class="artdiv">
-                            <p>Executor</p>
-                            <p>[artexec]</p>
-                        </div>
-                        <div class="artdiv">
-                            <p>Date</p>
-                            <p>[artdate]</p>
+                            <label for="date">Date</label>
+                            <input type="date" name="artdate" id="artdate">
                         </div>
                     </div>
                     <hr>
                     <div class="artdiv">
-                        <p>Description</p>
-                        <p>[artdesc]</p>
+                        <div id="descdiv">
+                            <label for="description">Description</label>
+                            <button id="addtask">Add task</button>
+                        </div>
+                        <input type="text" name="artdesc" id="artdesc" placeholder="Write the description here.">
                     </div>
-                </article>
-            </div>
-            <div>
-                <article>
-                    <form id="newform" action="" method="post">
-                        <div class="artheader">
-                            <div class="artdiv">
-                                <label for="title">Title</label>
-                                <input required type="text" name="arttitl" id="arttitl" placeholder="Write the title here.">
-                            </div>
-                            <div class="artdiv">
-                                <label for="executor">Executor</label>
-                                <select name="artexec" id="artexec">
-                                    <option value="1">blech</option>
-                                    <option value="2">asdf</option>
-                                </select>
-                            </div>
-                            <div class="artdiv">
-                                <label for="date">Date</label>
-                                <input type="date" name="artdate" id="artdate">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="artdiv">
-                            <div id="descdiv">
-                                <label for="description">Description</label>
-                                <button id="newtask">New task</button>
-                            </div>
-                            <input type="text" name="artdesc" id="artdesc" placeholder="Write the description here.">
-                        </div>
-                    </form>
-                </article>
-            </div>
+                </form>
+            </article>
         </div>
         <div id="userinfo" style="display: none">
             <form action="/userinfo" method="post">
@@ -121,6 +90,7 @@
             </form>
         </div>
     </div>
+    <div id="createtask">+</div>
 </body>
 
 </html>
