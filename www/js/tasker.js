@@ -1,62 +1,12 @@
 window.onload = function () {
 
-    function getStyle(elementId) {
-        return document.getElementById(elementId).getAttribute('style');
-    };
-
-    function setStyle(elementId, displayType) {
-        document.getElementById(elementId).setAttribute('style', 'display: ' + displayType);
-    };
-
-    function showTasklist(tasklist) {
-        let content = '';
-        tasklist.forEach(element => {
-            let block = `<article>
-            <div class="artheader">
-                <div class="artdiv">
-                    <p>Title</p>
-                    <p>${element.title}</p>
-                </div>
-                <div class="artdiv">
-                    <p>Author</p>
-                    <p>${element.author}</p>
-                </div>
-                <div class="artdiv">
-                    <p>Executor</p>
-                    <p>${element.executor}</p>
-                </div>
-                <div class="artdiv">
-                    <p>Date</p>
-                    <p>${element.date}</p>
-                </div>
-            </div>
-            <hr>
-            <div class="artdiv">
-                <p>Description</p>
-                <p>${element.description}</p>
-            </div>
-            </article>`;
-            content += block;
-        });
-        document.getElementById('arttable').innerHTML = content;
-    };
-
-    function reloadTable() {
-        var req = new XMLHttpRequest();
-        req.open('POST', '/reload', true);
-        req.addEventListener('load', function (err, result) {
-            showTasklist(JSON.parse(req.response));
-        });
-        req.addEventListener('error', function (err) {
-        });
-        req.send(null);
-    };
+    reloadTable();
 
     document.getElementById('createtask').onclick = function () {
         setStyle('formtable', 'block');
         setStyle('listtasks', 'none');
         setStyle('userinfo', 'none');
-    }
+    };
 
     document.getElementById('huser').onclick = function () {
         if (document.getElementById('userdd').getAttribute('class') == 'ddhide') {
@@ -69,19 +19,19 @@ window.onload = function () {
     document.getElementById('ddhome').onclick = function () {
         event.preventDefault();
         reloadTable();
-        if (getStyle('listtasks') == 'display: block') {
-            setStyle('listtasks', 'none');
-        } else {
+        if (getStyle('listtasks') == 'display: none') {
             setStyle('listtasks', 'block');
             setStyle('userinfo', 'none');
             setStyle('formtable', 'none')
+        } else {
+            setStyle('listtasks', 'none');
         }
     };
 
     document.getElementById('edit_submit').onclick = function (event) {
         event.preventDefault();
         console.log('Sending POST data');
-        var req = new XMLHttpRequest();
+        let req = new XMLHttpRequest();
         req.open('POST', '/userinfo', true);
         req.setRequestHeader('Content-Type', 'application/json');
         req.addEventListener('load', function () {
@@ -94,7 +44,7 @@ window.onload = function () {
         req.addEventListener('error', function () {
             console.log('SUBMIT error');
         });
-        var data = {
+        let data = {
             name: document.getElementById('edit_name').value,
             nick: document.getElementById('edit_nick').value,
             mail: document.getElementById('edit_mail').value,
@@ -109,11 +59,11 @@ window.onload = function () {
         event.preventDefault();
         if (document.getElementById('userinfo').getAttribute('style') != 'display: block') {
             document.getElementById('throbber').setAttribute('class', 'show');
-            var req = new XMLHttpRequest();
+            let req = new XMLHttpRequest();
             req.open('GET', '/userinfo', true);
             req.addEventListener('load', function () {
                 if (req.status >= 200 && req.status < 400) {
-                    var userinfo = JSON.parse(req.response);
+                    let userinfo = JSON.parse(req.response);
                     document.getElementById('edit_name').value = userinfo.uname;
                     document.getElementById('edit_nick').value = userinfo.unick;
                     document.getElementById('edit_mail').value = userinfo.umail;
@@ -136,14 +86,15 @@ window.onload = function () {
 
     document.getElementById('addtask').onclick = function (event) {
         event.preventDefault();
-        var req = new XMLHttpRequest();
+        let req = new XMLHttpRequest();
         req.open('POST', '/addtask', true);
         req.setRequestHeader('Content-Type', 'application/json');
         req.addEventListener('load', function () {
-            var answer = JSON.parse(req.response);
+            let answer = JSON.parse(req.response);
             if (answer.status == 1) {
-                alert('Tarea creada con id:' + answer.taskid);
                 document.getElementById('newform').reset();
+                setStyle('formtable', 'none');
+                setStyle('listtasks', 'block');
             } else {
                 alert('No se ha podido crear la tarea');
             };
@@ -152,7 +103,7 @@ window.onload = function () {
         req.addEventListener('error', function () {
             console.log('SUBMIT error');
         });
-        var data = {
+        let data = {
             titl: document.getElementById('arttitl').value,
             desc: document.getElementById('artdesc').value,
             exec: document.getElementById('artexec').value,
@@ -166,4 +117,149 @@ window.onload = function () {
         reloadTable();
     };
 
+};
+
+function getStyle(elementId) {
+    return document.getElementById(elementId).getAttribute('style');
+};
+
+function setStyle(elementId, displayType) {
+    document.getElementById(elementId).setAttribute('style', 'display: ' + displayType);
+};
+
+function reloadTable() {
+    let req = new XMLHttpRequest();
+    req.open('POST', '/reload', true);
+    req.addEventListener('load', function (err, result) {
+        showTasklist(JSON.parse(req.response));
+    });
+    req.addEventListener('error', function (err) {
+    });
+    req.send(null);
+};
+
+function showTasklist(tasklist) {
+    let content = '';
+    tasklist.forEach(element => {
+        switch (element.permission) {
+            case 0:
+                divOptions = `<div></div>`;
+                break;
+            case 1:
+                divOptions = `
+                <div>
+                    <i id="optEdit" class="far fa-edit" onclick="taskEdit(${element.id})"></i>
+                    <i id="optDel" class="far fa-trash-alt" onclick="taskDelete(${element.id})"></i>
+                </div>`;
+                break;
+            case 2:
+                divOptions = `
+                <div>
+                    <i id="optComp" class="fas fa-check" onclick="taskComplete(${element.id})"></i>
+                </div>`;
+                break;
+            case 3:
+                divOptions = `
+                <div>
+                    <i id="optComp" class="fas fa-check" onclick="taskComplete(${element.id})"></i>
+                    <i id="optEdit" class="far fa-edit" onclick="taskEdit(${element.id})"></i>
+                    <i id="optDel" class="far fa-trash-alt" onclick="taskDelete(${element.id})"></i>
+                </div>`;
+                break;
+        };
+
+        let block = `<article>
+            <div class="artheader">
+                <div class="artdiv">
+                    <p>Title</p>
+                    <p>${element.title}</p>
+                </div>
+                <div class="artdiv">
+                    <p>Author</p>
+                    <p>${element.author}</p>
+                </div>
+                <div class="artdiv">
+                    <p>Executor</p>
+                    <p>${element.executor}</p>
+                </div>
+                <div class="artdiv">
+                    <p>Date</p>
+                    <p>${element.date}</p>
+                </div>
+            </div>
+            <hr>
+            <div class="artbody">
+                <div>
+                    <p>Description</p>
+                    <p>${element.description}</p>
+                </div>
+                <div class="artopt">
+                    <p>Options</p>
+                    ${divOptions}
+                </div>
+            </div>
+        </article>`;
+        content += block;
+    });
+    document.getElementById('arttable').innerHTML = content;
+};
+
+function taskComplete(id) {
+    let req = new XMLHttpRequest();
+    let url = '/complete?id=' + id;
+    req.open('GET', url, true);
+    req.addEventListener('load', function () {
+        if (req.status >= 200 && req.status < 400) {
+            let result = JSON.parse(req.response);
+            if (result.status == 1) {
+                reloadTable();
+            }
+        } else {
+            console.log(req.status + ' ' + req.statusText);
+        }
+    });
+    req.addEventListener('error', function () {
+        console.error('Network error');
+    });
+    req.send(null);
+}
+
+function taskDelete(id) {
+    let req = new XMLHttpRequest();
+    let url = '/delete?id=' + id;
+    req.open('GET', url, true);
+    req.addEventListener('load', function () {
+        if (req.status >= 200 && req.status < 400) {
+            let result = JSON.parse(req.response);
+            if (result.status == 1) {
+                reloadTable();
+            }
+        } else {
+            console.log(req.status + ' ' + req.statusText);
+        }
+    });
+    req.addEventListener('error', function () {
+        console.error('Network error');
+    });
+    req.send(null);
+};
+
+function taskEdit(id) {
+    let req = new XMLHttpRequest();
+    let url = '/edit?id=' + id;
+    req.open('GET', url, true);
+    req.addEventListener('load', function () {
+        if (req.status >= 200 && req.status < 400) {
+            let result = JSON.parse(req.response);
+            if (result.status == 1) {
+                reloadTable();
+            }
+        } else {
+            console.log(req.status + ' ' + req.statusText);
+        }
+    });
+    req.addEventListener('error', function () {
+        console.error('Network error');
+    });
+    req.send(null);
 };

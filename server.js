@@ -15,6 +15,9 @@ var connection = mysql.createConnection({
     database: 'apptareas'
 });
 
+const SELECT_TASKS = 'SELECT tasks.id, title, description, usr1.name as author, usr2.name as executor, date, status FROM tasks, users as usr1, users as usr2 WHERE author=usr1.id AND executor=usr2.id AND status=1';
+const SELECT_TASKSID = 'SELECT tasks.id, title, description, usr1.name as author, usr1.id as authid, usr2.name as executor, usr2.id as execid, date, status FROM tasks, users as usr1, users as usr2 WHERE author=usr1.id AND executor=usr2.id AND status=1';
+
 connection.connect(function (error) {
     if (error) {
         throw error;
@@ -84,6 +87,67 @@ app.post('/addtask', function (req, res) {
     });
 });
 
+app.get('/complete/:id?', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query(`UPDATE tasks SET status=2 WHERE id=${req.query.id}`, function (err, result) {
+        let qresp = {};
+        connection.query(SELECT_TASKS, function (error, response) {
+            if (err) {
+                throw err;
+                qresp = {
+                    status: 0,
+                    tasks: response
+                };
+            } else {
+                qresp = {
+                    status: 1,
+                    tasks: response
+                };
+            };
+            res.send(JSON.stringify(qresp));
+        });
+    });
+});
+
+app.get('/delete/:id?', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query(`UPDATE tasks SET status=0 WHERE id=${req.query.id}`, function (err, result) {
+        let qresp = {};
+        connection.query(SELECT_TASKS, function (error, response) {
+            if (err) {
+                throw err;
+                qresp = {
+                    status: 0,
+                    tasks: response
+                };
+            } else {
+                qresp = {
+                    status: 1,
+                    tasks: response
+                };
+            };
+            res.send(JSON.stringify(qresp));
+        });
+    });
+});
+
+app.get('/edit/:id?', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query(`UPDATE tasks SET title=?, executor=?, date=?, description=? WHERE id=${req.query.id}`, [req.body.titl, req.body.exec, req.body.date, req.body.desc], function (err, result) {
+        if (err) {
+            throw err;
+        } else {
+            console.log('Editando tarea ' + req.query.id);
+        }
+    });
+});
+
 app.get('/home', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
@@ -101,7 +165,7 @@ app.get('/home', function (req, res) {
                         <option value="${element.id}">${element.name}</option>`;
                     });
                 }
-                text = text.replace('[selector]', selection);
+                text = text.split('[selector]').join(selection);
                 res.send(text);
             });
         });
@@ -120,14 +184,24 @@ app.post('/reload', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
     };
-    connection.query('SELECT tasks.id, title, description, usr1.name as author, usr2.name as executor, date, status FROM tasks, users as usr1, users as usr2 WHERE author=usr1.id AND executor=usr2.id', function (err, result) {
+    connection.query(SELECT_TASKSID, function (err, result) {
         result.forEach(element => {
-            string = JSON.stringify(element.date);
-            day = string.substr(9, 2);
-            month = string.substr(6, 2);
-            year = string.substr(1, 4);
-            string = day + '/' + month + '/' + year;
-            element.date = string;
+            var d = new Date(String(element.date));
+            function pad(s) { return (s < 10) ? '0' + s : s; };
+            var formatDate = [pad(d.getDate()), pad(d.getMonth() + 1), pad(d.getFullYear())].join('/');
+            element.date = formatDate;
+            if (req.session.uid != element.authid && req.session.uid != element.execid) {
+                element.permission = 0;
+            };
+            if (req.session.uid == element.authid && req.session.uid != element.execid) {
+                element.permission = 1;
+            };
+            if (req.session.uid != element.authid && req.session.uid == element.execid) {
+                element.permission = 2;
+            };
+            if (req.session.uid == element.authid && req.session.uid == element.execid) {
+                element.permission = 3;
+            };
         });
         res.send(JSON.stringify(result));
     });
@@ -170,8 +244,6 @@ app.post('/userinfo', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
     };
-    console.log(req.body.pass, req.body.n1pass, req.body.n2pass);
-
     if (req.body.pass == '') {
         res.send('nok');
     } else {
@@ -181,7 +253,6 @@ app.post('/userinfo', function (req, res) {
             } else {
                 res.send('nok');
             };
-            console.log(result);
         });
     };
 });

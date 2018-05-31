@@ -16,6 +16,17 @@ body{
     display: flex;
 }
 
+
+footer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 0px;
+    background-color: gainsboro;
+}
+
 h1 {
     padding: 10px 20px;
     background-color: gainsboro;
@@ -41,6 +52,14 @@ header p{
     padding: 20px;
 }
 
+.artbody{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .artdiv{
     flex: 1;
     display: flex;
@@ -55,6 +74,11 @@ header p{
 }
 
 .artheader{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.artopt div{
     display: flex;
     justify-content: space-evenly;
 }
@@ -91,6 +115,12 @@ header p{
     display: block;
 }
 
+#copyleft{
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
 #createtask{
     color: white;
     right: 15px;
@@ -100,7 +130,7 @@ header p{
     display: flex;
     cursor: pointer;
     position: fixed;
-    font-size: 40px;
+    font-size: 30px;
     border-radius: 50%;
     align-items: center;
     background-color: gray;
@@ -162,6 +192,18 @@ header p{
     justify-content: space-evenly;
 }
 
+#optComp{
+    cursor: pointer;
+}
+
+#optDel{
+    cursor: pointer;
+}
+
+#optEdit{
+    cursor: pointer;
+}
+
 #reloadlist{
     color: white;
     right: 80px;
@@ -171,7 +213,7 @@ header p{
     display: flex;
     cursor: pointer;
     position: fixed;
-    font-size: 40px;
+    font-size: 30px;
     border-radius: 50%;
     align-items: center;
     background-color: gray;
@@ -226,6 +268,37 @@ header p{
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.updbody{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.upddiv{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.upddiv p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.updheader{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.updopt div{
+    display: flex;
+    justify-content: space-evenly;
 }
 
 #userinfo{

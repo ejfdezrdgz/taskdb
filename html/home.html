@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
     <script src="./js/tasker.js"></script>
     <title>Home</title>
 </head>
@@ -14,7 +16,7 @@
 <body>
     <div class="bodiv">
         <header>
-            <p id="huser">[username]</p>
+            <p id="huser" class="far fa-user"> [username]</p>
             <ul class="ddhide" id="userdd">
                 <li>
                     <a href="/" id="ddhome">Home</a>
@@ -29,9 +31,9 @@
         </header>
         <div id="headerpad"></div>
         <div id="throbber" class="hide"></div>
-        <div id="listtasks" style="display: none">
+        <div id="listtasks" style="display: block">
             <div id="arttable"></div>
-            <div id="reloadlist">&#8635;</div>
+            <span id="reloadlist" class="fas fa-sync-alt"></span>
         </div>
         <div id="formtable" style="display: none">
             <article>
@@ -63,6 +65,36 @@
                 </form>
             </article>
         </div>
+        <div id="updatetask" style="display: none">
+            <article>
+                <form id="updform" action="" method="post">
+                    <div class="updheader">
+                        <div class="upddiv">
+                            <label for="title">Title</label>
+                            <input required type="text" name="updtitl" id="updtitl">
+                        </div>
+                        <div class="upddiv">
+                            <label for="executor">Executor</label>
+                            <select name="updexec" id="updexec">
+                                [selector]
+                            </select>
+                        </div>
+                        <div class="upddiv">
+                            <label for="date">Date</label>
+                            <input type="date" name="upddate" id="upddate">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="upddiv">
+                        <div id="descdiv">
+                            <label for="description">Description</label>
+                            <button id="updtask">Update task</button>
+                        </div>
+                        <input type="text" name="upddesc" id="upddesc">
+                    </div>
+                </form>
+            </article>
+        </div>
         <div id="userinfo" style="display: none">
             <form action="/userinfo" method="post">
                 <div>
@@ -90,7 +122,11 @@
             </form>
         </div>
     </div>
-    <div id="createtask">+</div>
+    <!-- <footer>
+        <img id="copyleft" src="resources/img/cl.png" alt="">
+        <p>Copyleft protected. Done by: E. J. Fernández</p>
+    </footer> -->
+    <span id="createtask" class="fas fa-plus"></span>
 </body>
 
 </html>
