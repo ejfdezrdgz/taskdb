@@ -47,9 +47,16 @@ header{
     border-bottom: 1px solid black;
 }
 
-header p{
+header div{
     margin: 0px;
     padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+header p{
+    margin: 0;
+    margin-left: 15px;
 }
 
 .artbody{
@@ -80,7 +87,13 @@ header p{
 
 .artopt div{
     display: flex;
+    min-width: 70px;
+    max-width: 100px;
     justify-content: space-evenly;
+}
+
+.artopt p{
+    text-align: center;
 }
 
 .bodiv{
@@ -111,8 +124,44 @@ header p{
     display: none;
 }
 
+.label{
+    font-size: 13pt;
+    font-weight: 600;
+}
+
 .show{
     display: block;
+}
+
+.updbody{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.upddiv{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.upddiv p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.updheader{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.updopt div{
+    display: flex;
+    justify-content: space-evenly;
 }
 
 #copyleft{
@@ -140,6 +189,12 @@ header p{
 #descdiv{
     display: flex;
     justify-content: space-between;
+}
+
+#descdiv i{
+    cursor: pointer;
+    font-size: 20px;
+    margin-bottom: 5px;
 }
 
 #err_login{
@@ -192,15 +247,24 @@ header p{
     justify-content: space-evenly;
 }
 
+#optdiv{
+    width: 100px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
 #optComp{
+    color: green;
     cursor: pointer;
 }
 
 #optDel{
+    color: blue;
     cursor: pointer;
 }
 
 #optEdit{
+    color: orange;
     cursor: pointer;
 }
 
@@ -270,35 +334,17 @@ header p{
     100% { transform: rotate(360deg); }
 }
 
-.updbody{
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    padding-left: 10px;
-    padding-right: 10px;
+#updatetask {
+    width: 80%;
+    max-width: 700px;
 }
 
-.upddiv{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding-left: 10px;
-    padding-right: 10px;
+#updcancel{
+    color: red;
 }
 
-.upddiv p{
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.updheader{
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.updopt div{
-    display: flex;
-    justify-content: space-evenly;
+#updtask{
+    color: green;
 }
 
 #userinfo{

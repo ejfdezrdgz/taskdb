@@ -5,6 +5,7 @@ window.onload = function () {
     document.getElementById('createtask').onclick = function () {
         setStyle('formtable', 'block');
         setStyle('listtasks', 'none');
+        setStyle('updatetask', 'none');
         setStyle('userinfo', 'none');
     };
 
@@ -21,6 +22,7 @@ window.onload = function () {
         reloadTable();
         if (getStyle('listtasks') == 'display: none') {
             setStyle('listtasks', 'block');
+            setStyle('updatetask', 'none');
             setStyle('userinfo', 'none');
             setStyle('formtable', 'none')
         } else {
@@ -28,7 +30,7 @@ window.onload = function () {
         }
     };
 
-    document.getElementById('edit_submit').onclick = function (event) {
+    document.getElementById('uinfo_editsubmit').onclick = function (event) {
         event.preventDefault();
         console.log('Sending POST data');
         let req = new XMLHttpRequest();
@@ -69,6 +71,7 @@ window.onload = function () {
                     document.getElementById('edit_mail').value = userinfo.umail;
                     document.getElementById('throbber').setAttribute('class', 'hide');
                     setStyle('listtasks', 'none');
+                    setStyle('updatetask', 'none');
                     setStyle('formtable', 'none');
                     setStyle('userinfo', 'block');
                 } else {
@@ -112,9 +115,55 @@ window.onload = function () {
         req.send(JSON.stringify(data));
     };
 
+    document.getElementById('updtask').onclick = function (event) {
+        event.preventDefault();
+        let req = new XMLHttpRequest();
+        req.open('POST', '/edit', true);
+        req.setRequestHeader('Content-Type', 'application/json');
+        req.addEventListener('load', function () {
+            let answer = JSON.parse(req.response);
+            if (answer.status == 1) {
+                document.getElementById('updform').reset();
+                setStyle('listtasks', 'block');
+                setStyle('updatetask', 'none');
+            } else {
+                alert('No se ha podido editar la tarea');
+            };
+            reloadTable();
+        });
+        req.addEventListener('error', function () {
+            console.log('SUBMIT error');
+        });
+        let data = {
+            taskid: document.getElementById('updtaskid').value,
+            titl: document.getElementById('updtitl').value,
+            desc: document.getElementById('upddesc').value,
+            exec: document.getElementById('updexec').value
+        };
+        req.send(JSON.stringify(data));
+    };
+
+    document.getElementById('updcancel').onclick = function (event) {
+        setStyle('listtasks', 'block');
+        setStyle('updatetask', 'none');
+        document.getElementById('updform').reset();
+    };
+
     document.getElementById('reloadlist').onclick = function (event) {
         event.preventDefault();
         reloadTable();
+    };
+
+    document.getElementById('avatar').onchange = function (event) {
+        let file = event.target.files;
+        let reader = new FileReader();
+        reader.onload = (function (read) {
+            return function (e) {
+                console.log(e.target.result);
+                document.getElementById('avatar_preview').innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(read.name), '"/>'].join('');
+            };
+        })(file);
+        reader.readAsDataURL(file[0]);
     };
 
 };
@@ -171,30 +220,30 @@ function showTasklist(tasklist) {
         let block = `<article>
             <div class="artheader">
                 <div class="artdiv">
-                    <p>Title</p>
+                    <p class="label">Title</p>
                     <p>${element.title}</p>
                 </div>
                 <div class="artdiv">
-                    <p>Author</p>
+                    <p class="label">Author</p>
                     <p>${element.author}</p>
                 </div>
                 <div class="artdiv">
-                    <p>Executor</p>
+                    <p class="label">Executor</p>
                     <p>${element.executor}</p>
                 </div>
                 <div class="artdiv">
-                    <p>Date</p>
+                    <p class="label">Date</p>
                     <p>${element.date}</p>
                 </div>
             </div>
             <hr>
             <div class="artbody">
                 <div>
-                    <p>Description</p>
+                    <p class="label">Description</p>
                     <p>${element.description}</p>
                 </div>
                 <div class="artopt">
-                    <p>Options</p>
+                    <p class="label">Options</p>
                     ${divOptions}
                 </div>
             </div>
@@ -251,9 +300,12 @@ function taskEdit(id) {
     req.addEventListener('load', function () {
         if (req.status >= 200 && req.status < 400) {
             let result = JSON.parse(req.response);
-            if (result.status == 1) {
-                reloadTable();
-            }
+            document.getElementById('updtaskid').value = result.task.tid;
+            document.getElementById('updtitl').value = result.task.titl;
+            document.getElementById('upddesc').value = result.task.tdesc;
+            document.getElementById('updexec').value = result.task.texec;
+            setStyle('updatetask', 'block');
+            setStyle('listtasks', 'none');
         } else {
             console.log(req.status + ' ' + req.statusText);
         }

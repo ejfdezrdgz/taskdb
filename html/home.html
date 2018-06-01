@@ -16,7 +16,10 @@
 <body>
     <div class="bodiv">
         <header>
-            <p id="huser" class="far fa-user"> [username]</p>
+            <div>
+                <i class="far fa-user"></i>
+                <p id="huser"> [username]</p>
+            </div>
             <ul class="ddhide" id="userdd">
                 <li>
                     <a href="/" id="ddhome">Home</a>
@@ -69,26 +72,28 @@
             <article>
                 <form id="updform" action="" method="post">
                     <div class="updheader">
+                        <input type="hidden" id="updtaskid">
                         <div class="upddiv">
-                            <label for="title">Title</label>
+                            <label class="label" for="title">Title</label>
                             <input required type="text" name="updtitl" id="updtitl">
                         </div>
                         <div class="upddiv">
-                            <label for="executor">Executor</label>
+                            <label class="label" for="executor">Executor</label>
                             <select name="updexec" id="updexec">
                                 [selector]
                             </select>
-                        </div>
-                        <div class="upddiv">
-                            <label for="date">Date</label>
-                            <input type="date" name="upddate" id="upddate">
                         </div>
                     </div>
                     <hr>
                     <div class="upddiv">
                         <div id="descdiv">
-                            <label for="description">Description</label>
-                            <button id="updtask">Update task</button>
+                            <label class="label" for="description">Description</label>
+                            <div id="optdiv">
+                                <i class="fas fa-ban" id="updcancel"></i>
+                                <i class="far fa-check-circle" id="updtask"></i>
+                                <!-- <button id="updcancel">Cancel editing</button> -->
+                                <!-- <button id="updtask">Update task</button> -->
+                            </div>
                         </div>
                         <input type="text" name="upddesc" id="upddesc">
                     </div>
@@ -107,6 +112,9 @@
                     <label for="edit_mail">E-mail:</label>
                     <input type="email" name="edit_mail" id="edit_mail">
                     <hr>
+                    <label for="avatar">Profile picture:</label>
+                    <input type="file" name="avatar" id="avatar" accept="image/*">
+                    <hr>
                     <label for="pass_check">Current password:</label>
                     <input type="password" name="pass_check" id="pass_check">
                     <hr>
@@ -117,7 +125,9 @@
                     <input type="password" name="new_pass2" id="new_pass2">
                 </div>
                 <div>
-                    <button type="submit" id="edit_submit" type="submit">SUBMIT</button>
+                    <button type="submit" id="uinfo_editsubmit" type="submit">SUBMIT</button>
+                    
+                    <output id="avatar_preview"></output>
                 </div>
             </form>
         </div>

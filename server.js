@@ -17,6 +17,7 @@ var connection = mysql.createConnection({
 
 const SELECT_TASKS = 'SELECT tasks.id, title, description, usr1.name as author, usr2.name as executor, date, status FROM tasks, users as usr1, users as usr2 WHERE author=usr1.id AND executor=usr2.id AND status=1';
 const SELECT_TASKSID = 'SELECT tasks.id, title, description, usr1.name as author, usr1.id as authid, usr2.name as executor, usr2.id as execid, date, status FROM tasks, users as usr1, users as usr2 WHERE author=usr1.id AND executor=usr2.id AND status=1';
+const SELECT_TASK_AND_USERS = 'SELECT tasks.id as taskid, title, description as tdesc, author as authid, executor as execid, users.id as uid, name as uname FROM tasks RIGHT JOIN users ON executor = users.id AND tasks.id=?';
 
 connection.connect(function (error) {
     if (error) {
@@ -139,12 +140,53 @@ app.get('/edit/:id?', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
     };
-    connection.query(`UPDATE tasks SET title=?, executor=?, date=?, description=? WHERE id=${req.query.id}`, [req.body.titl, req.body.exec, req.body.date, req.body.desc], function (err, result) {
+    let data = {
+        users: []
+    };
+    connection.query(SELECT_TASK_AND_USERS, [req.query.id], function (err, result) {
         if (err) {
             throw err;
         } else {
-            console.log('Editando tarea ' + req.query.id);
+            result.forEach(element => {
+                if (element.taskid) {
+                    data.task = {
+                        tid: element.taskid,
+                        titl: element.title,
+                        tdesc: element.tdesc,
+                        tauth: element.authid,
+                        texec: element.execid
+                    }
+                }
+                if (element.uid) {
+                    let user = {
+                        uid: element.uid,
+                        uname: element.uname
+                    }
+                    data.users.push(user);
+                }
+            });
         }
+        res.send(JSON.stringify(data));
+    });
+});
+
+app.post('/edit', function (req, res) {
+    if (cookieChecker(req, res)) {
+        return;
+    };
+    connection.query(`UPDATE tasks SET title=?, executor=?, description=? WHERE id=${req.body.taskid}`, [req.body.titl, req.body.exec, req.body.desc], function (error, result) {
+        connection.query('SELECT * FROM tasks', function (err, resp) {
+            if (err) {
+                throw err;
+            } else {
+                if (error) {
+                    list = { status: 0, taskid: null, tasks: resp };
+                } else {
+                    list = { status: 1, taskid: result.insertId, tasks: resp };
+                };
+                res.send(JSON.stringify(list));
+            };
+        });
     });
 });
 
