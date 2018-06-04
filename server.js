@@ -57,6 +57,7 @@ app.post('/', function (req, res) {
                 req.session.uid = result[0].id;
                 req.session.name = result[0].name;
                 req.session.user = req.body.nick;
+                req.session.avatar = result[0].avatar;
                 res.redirect('/home');
             } else {
                 fs.readFile('./html/login.html', 'utf8', function (err, text) {
@@ -197,6 +198,12 @@ app.get('/home', function (req, res) {
     connection.query('SELECT id, name FROM users', function (err, result) {
         fs.readFile('./html/home.html', 'utf8', function (err, text) {
             text = text.replace('[username]', req.session.name);
+            if (req.session.avatar != '') {
+                avatar = req.session.avatar;
+                text = text.split('[avatarsrc]').join(avatar);
+            } else {
+                text = text.split('[avatarsrc]').join('');
+            };
             connection.query('SELECT * FROM users', function (err, result) {
                 let selection = '';
                 if (err) {
@@ -273,11 +280,12 @@ app.get('/userinfo', function (req, res) {
                 uid: result[0].id,
                 uname: result[0].name,
                 unick: result[0].nick,
-                umail: result[0].mail
+                umail: result[0].mail,
             };
-            setTimeout(function () {
-                res.send(JSON.stringify(uinfo));
-            }, 5000);
+            // setTimeout(function () {
+            //     res.send(JSON.stringify(uinfo));
+            // }, 5000);
+            res.send(JSON.stringify(uinfo));
         };
     });
 });
@@ -286,10 +294,14 @@ app.post('/userinfo', function (req, res) {
     if (cookieChecker(req, res)) {
         return;
     };
+    let image = req.body.avatar;
+    let base64Data = image.replace(/^data:image\/jpeg;base64,/, '');
+    let name = './www/resources/avatars/img_' + req.session.user + '.jpg';
+    fs.writeFile(name, base64Data, 'base64', function (err) { });
     if (req.body.pass == '') {
         res.send('nok');
     } else {
-        connection.query("UPDATE users SET name=?, pass=?, mail=?  WHERE id=?", [req.body.name, req.body.n1pass, req.body.mail, req.session.uid], function (err, result) {
+        connection.query("UPDATE users SET name=?, pass=?, mail=?, avatar=?  WHERE id=?", [req.body.name, req.body.n1pass, req.body.mail, req.body.avatar, req.session.uid], function (err, result) {
             if (result.affectedRows > 0) {
                 res.send('ok');
             } else {

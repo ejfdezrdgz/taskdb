@@ -17,7 +17,9 @@
     <div class="bodiv">
         <header>
             <div>
-                <i class="far fa-user"></i>
+                <div>
+                    <img id="headeravatar" src="[avatarsrc]" alt="" class="far fa-user">
+                </div>
                 <p id="huser"> [username]</p>
             </div>
             <ul class="ddhide" id="userdd">
@@ -106,14 +108,16 @@
                     <label for="edit_name">Name:</label>
                     <input type="text" name="edit_name" id="edit_name">
                     <hr>
-                    <label for="edit_nick">Nickname:</label>
-                    <input type="text" name="edit_nick" id="edit_nick">
-                    <hr>
                     <label for="edit_mail">E-mail:</label>
                     <input type="email" name="edit_mail" id="edit_mail">
                     <hr>
-                    <label for="avatar">Profile picture:</label>
-                    <input type="file" name="avatar" id="avatar" accept="image/*">
+                    <label for="edit_avatar">Profile picture:</label>
+                    <div>
+                        <div>
+                            <img id="avatar_img" src="[avatarsrc]" alt="">
+                        </div>
+                        <input type="file" name="edit_avatar" id="edit_avatar" accept="image/*">
+                    </div>
                     <hr>
                     <label for="pass_check">Current password:</label>
                     <input type="password" name="pass_check" id="pass_check">
@@ -126,8 +130,6 @@
                 </div>
                 <div>
                     <button type="submit" id="uinfo_editsubmit" type="submit">SUBMIT</button>
-                    
-                    <output id="avatar_preview"></output>
                 </div>
             </form>
         </div>

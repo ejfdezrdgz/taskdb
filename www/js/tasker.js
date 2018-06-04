@@ -48,8 +48,8 @@ window.onload = function () {
         });
         let data = {
             name: document.getElementById('edit_name').value,
-            nick: document.getElementById('edit_nick').value,
             mail: document.getElementById('edit_mail').value,
+            avatar: document.getElementById('avatar_img').src,
             pass: document.getElementById('pass_check').value,
             n1pass: document.getElementById('new_pass1').value,
             n2pass: document.getElementById('new_pass2').value
@@ -67,7 +67,6 @@ window.onload = function () {
                 if (req.status >= 200 && req.status < 400) {
                     let userinfo = JSON.parse(req.response);
                     document.getElementById('edit_name').value = userinfo.uname;
-                    document.getElementById('edit_nick').value = userinfo.unick;
                     document.getElementById('edit_mail').value = userinfo.umail;
                     document.getElementById('throbber').setAttribute('class', 'hide');
                     setStyle('listtasks', 'none');
@@ -154,16 +153,13 @@ window.onload = function () {
         reloadTable();
     };
 
-    document.getElementById('avatar').onchange = function (event) {
-        let file = event.target.files;
+    document.getElementById('edit_avatar').onchange = function (event) {
+        let file = event.target.files[0];
         let reader = new FileReader();
-        reader.onload = (function (read) {
-            return function (e) {
-                console.log(e.target.result);
-                document.getElementById('avatar_preview').innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(read.name), '"/>'].join('');
-            };
-        })(file);
-        reader.readAsDataURL(file[0]);
+        reader.onload = function (reader) {
+            document.getElementById('avatar_img').src = reader.target.result;
+        };
+        reader.readAsDataURL(file);
     };
 
 };
